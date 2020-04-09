@@ -6,7 +6,7 @@ var port = 3800;
 
 //conexion database
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/curso_mean_social', { useNewUrlParser: true })
+mongoose.connect('mongodb://localhost:27017/curso_mean_social', { useUnifiedTopology: true, useNewUrlParser: true })
         .then(() =>  {
             console.log('Conectado correctamente a la base de datos curso_mean_social');
             // Crear servidor
