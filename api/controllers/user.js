@@ -1,6 +1,8 @@
 'use strict'
 var bcrypt = require('bcrypt-nodejs');
 var mongoosePaginate = require('mongoose-pagination');
+var fs = require('fs');
+var path = require('path');
 
 var User = require('../models/user');
 var jwt = require('../services/jwt');
@@ -152,7 +154,7 @@ function updateUser(req, res) {
         return res.status(500).send({message: "No tienes permisos para actualizar los datos del usuario"});
     }
 
-    User.findByIdAndUpdate(userId, update, {new:true}, (err, userUpdated) => {
+    User.findOneAndUpdate(userId, update, {new:true}, (err, userUpdated) => {
         if (err) {return res.status(500).send({message: "Error en la petición"})}
         
         if (!userUpdated) {
@@ -164,6 +166,52 @@ function updateUser(req, res) {
 
 }
 
+
+function uploadImage(req, res) {
+    var userId = req.params.id;
+
+    if (req.files) {
+        var file_path = req.files.image.path;
+        var file_split = file_path.split('\\');
+
+        var file_name = file_split[2];
+        var ext_split = file_name.split('\.');
+        var file_ext = ext_split[1];
+
+        if (userId != req.user.sub) {
+            return removeFilesOfUpload(res, file_path, "No tienes permisos para actualizar los datos del usuario");
+        }
+
+        var ext_allow = ['png', 'jpg', 'jpeg', 'gif'];
+
+        if (ext_allow.includes(file_ext)) {
+
+            //Actualizar documento de usuario logado           
+            User.findByIdAndUpdate(userId, {image : file_name}, {new: true}, (err, userUpdated)=>{
+                if (err) {return res.status(500).send({message: "Error en la petición"})}
+        
+                if (!userUpdated) {
+                    return res.status(404).send({message: "No se ha podido actulizar el usuario"});   
+                }
+        
+                return res.status(200).send({user: userUpdated});
+            });
+
+        } else {
+           return removeFilesOfUpload(res, file_path, "Extensión no válida");
+        }
+
+    } else {
+        return res.status(200).send({message: "No se ha subido imágenes"});
+    }
+}
+
+function removeFilesOfUpload(res, file_path, message) {
+    fs.unlink(file_path, (err) =>{
+        return res.status(200).send({message: message});
+    });
+}
+
 module.exports = {
     home,
     pruebas,
@@ -172,5 +220,6 @@ module.exports = {
     getUser,
     getUsers,
     updateUser,
+    uploadImage,
 }
 
