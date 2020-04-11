@@ -58,6 +58,28 @@ function getFollowingUsers(req, res) {
     });
 }
 
+function getFollowedUsers(req, res) {
+
+    var userId =  req.params.id ? req.params.id : req.user.sub;
+    var page = 1;
+    page = req.params.page ? req.params.page : page;
+
+    var itemsPerPAge = 4;
+
+    Follow.find({followed: userId}).populate('user followed')
+    .paginate(page, itemsPerPAge, (err, follows, total) => {
+        if (err) { return res.status(500).send({message: "Error en el servidor"})}
+
+        if (!follows) { return res.status(404).send({message: "No te sigue ningún usuario"})}
+       
+        return res.status(200).send({
+            total,
+            pages: Math.ceil(total/itemsPerPAge),
+            follows,
+        });
+    });
+
+}
 
 
 
@@ -65,4 +87,5 @@ module.exports = {
     saveFollow,
     deleteFollow,
     getFollowingUsers,
+    getFollowedUsers,
 }
