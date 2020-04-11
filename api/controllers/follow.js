@@ -36,7 +36,33 @@ function deleteFollow(req, res) {
     });
 }
 
+
+function getFollowingUsers(req, res) {
+
+    var userId =  req.params.id && req.params.page ? req.params.id : req.user.sub;
+    var page = req.params.page ? req.params.page : req.params.id;
+
+    var itemsPerPAge = 4;
+
+    Follow.find({user: userId}).populate({path: 'followed'})
+    .paginate(page, itemsPerPAge, (err, follows, total) => {
+        if (err) { return res.status(500).send({message: "Error en el servidor"})}
+
+        if (!follows) { return res.status(404).send({message: "No sigues a ningún usuario"})}
+ 
+        return res.status(200).send({
+            total,
+            pages: Math.ceil(total/itemsPerPAge),
+            follows,
+        });
+    });
+}
+
+
+
+
 module.exports = {
     saveFollow,
     deleteFollow,
+    getFollowingUsers,
 }
