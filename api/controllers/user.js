@@ -5,6 +5,7 @@ var fs = require('fs');
 var path = require('path');
 
 var User = require('../models/user');
+var Follow = require('../models/follow');
 var jwt = require('../services/jwt');
 
 function home(req, res) {
@@ -117,9 +118,36 @@ function getUser(req, res) {
         
         if(!user){ return res.status(404).send({message: "El usuario no existe"})}
         
-        return res.status(200).send(user);
-
+        followThisUser(req.user.sub, userId).then((value)=>{
+            user.password = undefined;
+            return res.status(200).send({
+                user, 
+                following: value.following,
+                followed: value.followed,
+            });
+        });
     });
+}
+
+async function followThisUser(identity_user_id, user_id) {
+    var following = await Follow.findOne({ "user": identity_user_id, "followed": user_id }).exec().then((follow) => {
+        return follow;
+    }).catch((err) => {
+        return handleError(err);
+    });
+ 
+    var followed = await Follow.findOne({ "user": user_id, "followed": identity_user_id }).exec().then((follow) => {
+        console.log(follow);
+        return follow;
+    }).catch((err) => {
+        return handleError(err);
+    });
+ 
+ 
+    return {
+        following: following,
+        followed: followed
+    }
 }
 
 function getUsers(req, res) {
