@@ -137,7 +137,6 @@ async function followThisUser(identity_user_id, user_id) {
     });
  
     var followed = await Follow.findOne({ "user": user_id, "followed": identity_user_id }).exec().then((follow) => {
-        console.log(follow);
         return follow;
     }).catch((err) => {
         return handleError(err);
@@ -161,15 +160,52 @@ function getUsers(req, res) {
         
         if(!users){ return res.status(404).send({message: "No hay usuarios disponibles"})}
 
-        return res.status(200).send({
-            users,
-            total,
-            pages : Math.ceil(total/itemsPerPage),
+        followUserIds(identity_user_id).then((value) => {
+
+            return res.status(200).send({
+                users,
+                users_following : value.following,
+                users_follow_me : value.followed,
+                total,
+                pages : Math.ceil(total/itemsPerPage),
+    
+            });
 
         });
+       
     });
 
 }
+
+async function followUserIds(user_id){
+    try{
+        var following= await Follow.find({"user":user_id}).select({'_id':0,'__v':0,'user':0}).exec()
+        .then((follows)=>{return follows;}).catch((err)=>{return handleError(err)});
+ 
+        var followed= await Follow.find({"followed":user_id}).select({'_id':0,'__v':0,'followed':0}).exec()
+        .then((follows)=>{return follows;}).catch((err)=>{return handleError(err)});
+    
+       //Procesar following Ids
+        var following_clean = [];
+        following.forEach((follow)=>{
+            following_clean.push(follow.followed);
+        });
+    
+       //Procesar followed Ids
+        var followed_clean = [];
+        followed.forEach((follow)=>{
+            followed_clean.push(follow.user);
+        });
+        return{
+            following: following_clean,
+            followed: followed_clean
+        } 
+    
+        }catch(e){
+            console.log(e);
+        }
+   }
+
 
 function updateUser(req, res) {
     var userId = req.params.id;
