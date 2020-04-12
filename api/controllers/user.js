@@ -206,6 +206,36 @@ async function followUserIds(user_id){
         }
    }
 
+function getCounters(req, res) {
+
+    var userId = req.params.id ? req.params.id : req.user.sub;
+
+    getCountFollow(userId).then((value) =>{
+        return res.status(200).send(value);
+    });
+
+
+}
+async function getCountFollow(user_id) {
+    var following = await Follow.count({'user':user_id}).exec()
+    .then((count) =>{
+        return count;
+    }).catch((err) => {
+        return handleError(err);
+    });
+
+    var followed = await Follow.count({'followed':user_id}).exec()
+    .then((count) =>{
+        return count;
+    }).catch((err) => {
+        return handleError(err);
+    });
+
+    return {
+        following: following,
+        followed: followed,
+    }
+}
 
 function updateUser(req, res) {
     var userId = req.params.id;
@@ -296,6 +326,7 @@ module.exports = {
     loginUser,
     getUser,
     getUsers,
+    getCounters,
     updateUser,
     uploadImage,
     getImageFile,
