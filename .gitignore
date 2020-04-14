@@ -5,8 +5,8 @@
 /tmp
 /out-tsc
 curso-mean-social.code-workspace
-/api/upload/publications/*
-/api/upload/users/*
+#/api/upload/publications/*
+#/api/upload/users/*
 
 # Only exists if Bazel was run
 /bazel-out
