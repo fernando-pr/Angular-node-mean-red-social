@@ -12,4 +12,4 @@ api.get('/my-messages/:page?', md_auth.ensureAuth, MessageController.getReceived
 api.get('/messages/:page?', md_auth.ensureAuth, MessageController.getEmittedMessages);
 api.get('/unviewed-messages', md_auth.ensureAuth, MessageController.getUnviewedMessages);
 
-module.exports = api;
+module.exports = api; 
