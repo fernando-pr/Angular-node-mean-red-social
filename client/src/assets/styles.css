@@ -13,6 +13,10 @@
   background: #cc1717 !important;
 }
 
+.pinter {
+  cursor: pointer;
+}
+
 /** Cabecera **/
 .navigation {
     padding: 0px !important;
