@@ -1,12 +1,12 @@
 <div class="navigation col-lg-12">
   <nav class="navbar navbar-default">
     <div class="container-fluid">
-      
+
       <div class="navbar-header">
         <a href="#" class="navbar-brand">{{title}}</a>
       </div>
-      
-      <ul class="nav navbar-nav">
+
+      <ul class="nav navbar-nav" *ngIf="identity">
 
         <!-- Inicio-->
         <li class="">
@@ -31,12 +31,28 @@
             Gente
           </a>
         </li>
+      </ul>
 
-       
+      <ul class="nav navbar-nav navbar-right" *ngIf="!identity">
+          <!-- Login-->
+          <li class="">
+            <a [routerLink]="['/login']" [routerLinkActive]="['active']">
+              <span class="glyphicon glyphicon-log-in"></span>
+              Login
+            </a>
+          </li>
+
+           <!-- Registro-->
+           <li class="">
+            <a [routerLink]="['/registro']" [routerLinkActive]="['active']">
+              <span class="glyphicon glyphicon-user"></span>
+              Registro
+            </a>
+          </li>
 
 
       </ul>
-    
+
     </div>
   </nav>
 </div>
