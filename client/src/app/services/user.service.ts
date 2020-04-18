@@ -25,7 +25,7 @@ export class UserService {
   singup(user: User, gettoken = null): Observable<any> {
 
     if (gettoken != null) {
-      user.gettoken = gettoken;
+      //user.gettoken = gettoken;
     }
 
     let params = JSON.stringify(user);
