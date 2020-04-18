@@ -49,7 +49,34 @@
               Registro
             </a>
           </li>
+      </ul>
 
+      <ul class="nav navbar-nav navbar-right" *ngIf="identity">
+        <li class="avatar">
+            <!--Cargar imagen de usuario-->
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            {{identity.name}} <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="#">
+                <span class="glyphicon glyphicon-user"></span>
+                Mi perfil</a>
+            </li>
+            <li>
+              <a href="#">
+                <span class="glyphicon glyphicon-cog"></span>
+                Mis datos</a>
+            </li>
+            <li>
+              <a href="#">
+                <span class="glyphicon glyphicon-off"></span>
+                Cerrar sesión</a>
+            </li>
+          </ul>
+        </li>
 
       </ul>
 

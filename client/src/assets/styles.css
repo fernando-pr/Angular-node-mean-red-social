@@ -31,6 +31,12 @@
 .navigation .navbar a:hover {
   background: #cc1717 !important;
 }
+.navigation .navbar .dropdown-menu a:hover {
+  background: #eee !important;
+}
+.navbar-default .navbar-nav>li>a:focus {
+  background: #cc1717 !important;
+}
 
 .jumbotron {
   padding: 25px;
@@ -40,4 +46,8 @@
 
 .linksHome > a{
   margin: 1%;
+}
+
+.navigation .navbar .dropdown-menu *{
+  color: black !important;
 }
