@@ -33,4 +33,9 @@ export class UserEditComponent implements OnInit {
     console.log('user-edit.component se ha cargado');
 
   }
+
+  onSubmit(){
+    console.log(this.user);
+
+  }
 }
