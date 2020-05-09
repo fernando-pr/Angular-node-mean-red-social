@@ -53,6 +53,17 @@
         </span>
       </p>
 
+      <div class="form-right" *ngIf="user.image">
+
+        <img src="{{ url + 'get-image-user/' + user.image }}" alt="avatar" width="100" height="100">
+      </div>
+
+      <p>
+        <label>Sube tu avatar</label>
+        <input type="file" placeholder="Subir imagen"
+        (change)="fileChangeEvent($event)">
+      </p>
+
       <input type="submit" class="btn btn-warning" value="{{title}}"
       [disabled]="!userEditForm.form.valid">
 
