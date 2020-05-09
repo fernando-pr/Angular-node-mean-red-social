@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders ,HttpParams} from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { GLOBAL } from "./global";
 import { User } from '../models/user';
@@ -75,5 +75,19 @@ export class UserService {
         return this._http.get(this.url+'counters', {headers:headers});
       }
   }
-}
 
+
+  updateUser(user:User):Observable<any>{
+
+    const params = new HttpParams()
+    .set('user', JSON.stringify(user));
+
+    let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded')
+                                   .set('Authorization',this.getToken());
+
+
+    return this._http.put(this.url+'update-user/'+user._id,params,{headers:headers});
+
+  }
+
+}

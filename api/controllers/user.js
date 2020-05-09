@@ -246,28 +246,55 @@ async function getCountFollow(user_id) {
     }
 }
 
+
 function updateUser(req, res) {
-    var userId = req.params.id;
-    var update = req.body;
-
-    // borrar la propiedad password
+ 
+    const userId = req.params.id;
+    const update = JSON.parse(req.body.user);
+   
+   
+    // borrar la contraseña
     delete update.password;
-
-    if (userId != req.user.sub) {
-        return res.status(500).send({message: "No tienes permisos para actualizar los datos del usuario"});
+   
+    // comprobamos que el usuario modifique sus datos
+    if (userId !== req.user.sub) {
+      return res.status(500).send({
+        message: 'No tiene permisos suficiente para modificar los datos.'
+      });
     }
-
-    User.findOneAndUpdate(userId, update, {new:true}, (err, userUpdated) => {
-        if (err) {return res.status(500).send({message: "Error en la petición"})}
-        
-        if (!userUpdated) {
-            return res.status(404).send({message: "No se ha podido actulizar el usuario"});   
+   
+    
+    User.find({ $or: [{ email: update.email }, { nick: update.nick }] }).exec((err,users)=>{
+     
+      var userExiste = false;
+      users.forEach((user)=>{
+        if(user && user._id != userId) {
+          userExiste = true;
         }
-
-        return res.status(200).send({user: userUpdated});
+      });
+   
+    
+      if(userExiste){
+        return res.status(404).send({message:'Los datos ya están en uso.'});
+      } 
+      
+      // mongoose me devuelve el objeto user original, por lo cual le tengo que pasar un tercer parametro.(new:true)
+      // para que me vuelva el objeto userUpdated actualizado.
+      User.findByIdAndUpdate(userId, update, { new: true }, (err, userUpdated) => {
+        
+        if (err) return res.status(500).send({ message: 'Error en la petición.' });
+    
+        if (!userUpdated)
+          return res
+            .status(404)
+            .send({ message: 'No se ha podido actualizar el usuario.' });
+    
+        return res.status(200).send({ user: userUpdated });
+      });
     });
-
-}
+   
+   
+  }
 
 
 function uploadImage(req, res) {
