@@ -128,4 +128,23 @@ export class UsersComponent implements OnInit {
 			);
   }
 
+  unfollowUser(followed){
+    this._followService.deleteFollow(this.token, followed).subscribe(
+
+    response =>{
+      var search = this.follows.indexOf(followed);
+      if(search != -1){
+        this.follows.splice(search, 1);
+      }
+    },
+    error => {
+      var errorMessage = <any>error;
+      console.log(errorMessage);
+
+      if(errorMessage != null){
+        this.status = 'error';
+      }
+    }
+    );
+  }
 }
