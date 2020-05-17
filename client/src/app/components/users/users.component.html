@@ -30,9 +30,10 @@
             <p class="nickname">{{user.nick}}</p>
           </div>
               <!-- SEGUIR/DEJAR DE SEGUIR -->
-          <div class="pull-right">
+          <div class="pull-right" *ngIf="user._id != identity._id">
               <button class="btn btn-success"
                 *ngIf="follows.indexOf(user._id) < 0"
+                (click)= "followUser(user._id)"
               >
                 <span class="glyphicon glyphicon-plus-sign">
                 </span> Seguir
