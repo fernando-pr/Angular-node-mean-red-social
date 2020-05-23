@@ -63,3 +63,19 @@
 </div>
 
 <!--Formulario de publicaciones-->
+<div id="new-publication" class="col-lg-4 panel panel-default pull-left">
+  <form #newPubForm="ngForm" (ngSubmit)="onSubmit()" class="col-lg-10" >
+    <p>
+      <label>¿Qué estás pensando hoy?</label>
+      <textarea name="text" class="form-control" #text="ngModel" [(ngModel)]="publication.text" required></textarea>
+      <span *ngIf="!text.valid && text.touched">
+        El texto de la publicación es obligatorio
+      </span>
+    </p>
+    <p>
+      <label>Sube tu foto</label>
+      <input type="file" placeholder="Subir imagen">
+    </p>
+    <input type="submit" value="Enviar" class="btn btn-success" [disabled]="!newPubForm.form.valid" >
+  </form>
+</div>
