@@ -192,3 +192,9 @@
 #user-card .following-data:last-child {
   border: none;
 }
+
+/*Timeline*/
+
+#publications {
+  min-height: 500px;
+}

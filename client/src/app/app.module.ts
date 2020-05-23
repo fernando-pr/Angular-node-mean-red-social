@@ -13,6 +13,7 @@ import { HomeComponent } from './components/home/home.component';
 import { UserEditComponent } from './components/user-edit/user-edit.component';
 import { UsersComponent } from './components/users/users.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { TimelineComponent } from './components/timeline/timeline.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
     UserEditComponent,
     UsersComponent,
     SidebarComponent,
+    TimelineComponent,
   ],
   imports: [
     BrowserModule,
