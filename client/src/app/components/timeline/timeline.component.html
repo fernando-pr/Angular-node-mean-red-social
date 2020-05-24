@@ -1,8 +1,41 @@
 <div class="col-lg-8">
   <h1 class="h1-strong">{{title}}</h1>
   <div id="publications">
+    <div *ngFor="let publication of publications" class="item-publication">
+      <div class="panel panel-default">
+        <div class="panel-body">
 
+          <div class="image-user pull-left">
+            <a href="#">
+              <img class="avatar"
+                src="{{url + 'get-image-user/' + publication.user.image}}"
+                alt="user-image" *ngIf="publication.user.image; else notImage">
+            </a>
+            <ng-template #notImage>
+              <a href="#">
+                <img
+                  class="avatar-default"
+                  src="assets/user.png"
+                  alt="user-image">
+              </a>
+            </ng-template>
+          </div>
+
+          <div class="user-name">{{publication.user.name +' '+publication.user.surname}}</div>
+          <h4 class="publication-text pull-left">{{publication.text}}</h4>
+        </div>
+      </div>
+    </div>
   </div>
+
+  <div class="col-lg-12 text-center">
+    <p>
+      <button class="btn btn-success" (click)="viewMore()" *ngIf="!noMore">
+        Ver más publicaciones
+      </button>
+    </p>
+  </div>
+
 </div>
 
 <sidebar></sidebar>
